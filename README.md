@@ -4,7 +4,7 @@ This component is built for quarterly hour prices.
 No API key is needed to fetch the data.
 
 ## Pricing context
-All prices are expressed in €/MWh. No VAT or distribution network costs are added to the shown prices.
+All prices are expressed in €/MWh. VAT or distribution network costs can be added through the configuration.
 
 ## Sensors
 This component adds the following sensors to Home Assistant:
@@ -21,8 +21,8 @@ It can be installed manually by downloading the [latest release](https://github.
 
 ## Configuration
 Configuration is done through the UI by going to settings -> integrations -> add the SDAC Elia integration.
-To add the custom sensors, tick the boxes of the sensor you'd like to configure.
-For each custom sensor, two parameters are required. These two typically make up a price formula.
+Tick the boxes of the sensors you'd like to configure.
+For each sensor, two parameters are required. These two typically make up a price formula.
 The config parameters for each sensor are called:
 - custom_price
   - price_factor
@@ -37,7 +37,7 @@ In the case of Ecopower's formulae (as of dec-2025):
 - electricity price: 0.00102 * EPEX_DA + 0.004 [€/kWh]
 - injection tariff: 0.00098 * EPEX_DA - 0.015 [€/kWh]
 
-These formulae do not include network costs (NL: nettarieven). It is possible to include those network costs by adding them to the fixed cost parameter.
+These formulae do not include network costs (NL: nettarieven) or VAT (NL: BTW). It is possible to include those costs by adding them to the fixed cost or factor parameter, respectively.
 Note: the formula is expressed in €/kWh and should be configured this way as well, while the EPEX price is expressed in €/MWh.
 
 ## Graph with pricing forecast
