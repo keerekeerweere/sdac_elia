@@ -90,7 +90,7 @@ class SDAC_EliaCoordinator(DataUpdateCoordinator):
 
         # Fetch prices of tomorrow
         if not self.fetched_tomorrow and time_now.hour >= 13:
-            if self.last_fetch_tmrw == None or self.last_fetch_tmrw - time_now > datetime.timedelta(minutes=10):
+            if self.last_fetch_tmrw == None or time_now - self.last_fetch_tmrw > datetime.timedelta(minutes=10):
                 try:
                     sdac_tomorrow = await self._fetch_data(date_tomorrow)
                     self.last_fetch_tmrw = time_now
