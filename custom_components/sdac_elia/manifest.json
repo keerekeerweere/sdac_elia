@@ -1,7 +1,7 @@
 {
   "domain": "sdac_elia",
   "name": "SDAC Elia",
-  "codeowners": ["@milanhin"],
+  "codeowners": ["@milanhin", "@keerekeerweere"],
   "config_flow": true,
   "dependencies": [],
   "documentation": "https://github.com/keerekeerweere/sdac_elia",

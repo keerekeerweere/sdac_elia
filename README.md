@@ -17,7 +17,7 @@ Installing the custom component can be done with [HACS](https://hacs.xyz) by sea
 
 OR
 
-It can be installed manually by downloading the [latest release](https://github.com/milanhin/sdac_elia/releases) and copying the `sdac_elia` folder into to your Home Assistant `config/custom_components` folder.
+It can be installed manually by downloading the [latest release](https://github.com/keerekeerweere/sdac_elia/releases) and copying the `sdac_elia` folder into to your Home Assistant `config/custom_components` folder.
 
 ## Configuration
 Configuration is done through the UI by going to settings -> integrations -> add the SDAC Elia integration.
@@ -69,4 +69,4 @@ series:
       });
 ```
 And would result in:\
-![SDAC prices forecast plot](https://github.com/milanhin/sdac_elia/blob/main/assets/forecast_plot.png)
+![SDAC prices forecast plot](https://github.com/keerekeerweere/sdac_elia/blob/main/assets/forecast_plot.png)
