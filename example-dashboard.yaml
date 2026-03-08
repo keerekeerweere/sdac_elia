@@ -7,7 +7,7 @@ now:
   label: Now
 header:
   show: true
-  title: Elia SDAC prices (€/MWh)
+  title: Elia SDAC prices today & tomorrow (€/MWh)
 yaxis:
   - decimals: 2
 series:
