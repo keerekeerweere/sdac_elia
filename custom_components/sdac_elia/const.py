@@ -11,5 +11,7 @@ CONF_USER_STEP = "user_step"
 CONFIG = "config"
 
 PRICES = "prices"
+PRICES_TODAY = "prices_today"
+PRICES_TOMORROW = "prices_tomorrow"
 CURRENT_PRICE = "current_price"
 LAST_FETCH_TIME = "last_fetch_time"

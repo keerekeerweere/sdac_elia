@@ -19,6 +19,8 @@ from .const import (
     CONF_FIXED_INJ_PRICE,
     CONF_INJ_TARIFF_FACTOR,
     PRICES,
+    PRICES_TODAY,
+    PRICES_TOMORROW,
     CURRENT_PRICE,
     LAST_FETCH_TIME,
 )
@@ -50,7 +52,9 @@ class SDAC_EliaCoordinator(DataUpdateCoordinator):
         self.last_fetch_tmrw: datetime.datetime | None = None           # Time of last data fetch for tomorrow
         self.last_fetch_time: datetime.datetime | None = None           # Last time of fetching
         self.fetched_tomorrow: bool = False                             # Bool for fetched prices of tomorrow
-        self.prices: list[dict] = []                                    # Filtered data with time and price pairs of today and tomorrow
+        self.prices_today: list[dict] = []                              # Filtered data with time and price pairs of today
+        self.prices_tomorrow: list[dict] = []                           # Filtered data with time and price pairs of tomorrow
+        self.prices: list[dict] = []                                    # Combined list of today and tomorrow prices
         self.sdac_price: float | None = None                            # Current SDAC price
         self.ecopower_price: float | None = None                        # Current electricity price for Ecopower clients
         self.ecopower_inj_tariff: float | None = None                   # Current injection tariff for Ecopower clients
@@ -74,22 +78,23 @@ class SDAC_EliaCoordinator(DataUpdateCoordinator):
 
         # Fetch prices of today
         if self.last_fetch_date != date_today:
-            self.prices = []  # Empty price list on new day
+            self.prices_today = []  # Empty price list on new day
+            self.prices_tomorrow = []
             self.fetched_tomorrow = False
             try:
                 sdac_today = await self._fetch_data(date_today)
             except Exception as err:
                 _LOGGER.error("Error fetching data from Elia: %s", err)
                 return self.data
-            
+
             if len(sdac_today):  # If prices haven't been publsihed yet, an empty list will be returned
                 _LOGGER.info("SDAC prices of today fetched from Elia")
-                self.prices = [{"time": i["dateTime"], "price": i["price"]} for i in sdac_today]  # filter data to store time and price
+                self.prices_today = [{"time": i["dateTime"], "price": i["price"]} for i in sdac_today]  # filter data to store time and price
                 self.last_fetch_today = time_now
                 self.last_fetch_date = date_today
 
         # Fetch prices of tomorrow
-        if not self.fetched_tomorrow and time_now.hour >= 13:
+        if not self.fetched_tomorrow and time_now.hour >= 12:
             if self.last_fetch_tmrw == None or time_now - self.last_fetch_tmrw > datetime.timedelta(minutes=10):
                 try:
                     sdac_tomorrow = await self._fetch_data(date_tomorrow)
@@ -97,12 +102,13 @@ class SDAC_EliaCoordinator(DataUpdateCoordinator):
                 except Exception as err:
                     _LOGGER.error("Error fetching data from Elia: %s", err)
                     return self.data
-                
+
                 if len(sdac_tomorrow):  # If prices haven't been published yet, an empty list will be returned
                     _LOGGER.info("SDAC prices of tomorrow fetched from Elia")
-                    prices_tomorrow = [{"time": i["dateTime"], "price": i["price"]} for i in sdac_tomorrow]  # filter data to store time and price
-                    self.prices.extend(prices_tomorrow)
+                    self.prices_tomorrow = [{"time": i["dateTime"], "price": i["price"]} for i in sdac_tomorrow]  # filter data to store time and price
                     self.fetched_tomorrow = True
+
+        self.prices = self.prices_today + self.prices_tomorrow
         
         # Grab and calculate prices for sensors
         self.sdac_price = self.get_current_price()  # Find current price
@@ -118,6 +124,8 @@ class SDAC_EliaCoordinator(DataUpdateCoordinator):
         self.last_fetch_time = self.last_fetch_tmrw if self.fetched_tomorrow else self.last_fetch_today
         data = {
             PRICES: self.prices,
+            PRICES_TODAY: self.prices_today,
+            PRICES_TOMORROW: self.prices_tomorrow,
             CURRENT_PRICE: self.sdac_price,
             LAST_FETCH_TIME: self.last_fetch_time
         }

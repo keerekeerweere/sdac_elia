@@ -1,0 +1,25 @@
+type: custom:apexcharts-card
+graph_span: 48h
+span:
+  start: day
+now:
+  show: true
+  label: Now
+header:
+  show: true
+  title: Elia SDAC prices (€/MWh)
+yaxis:
+  - decimals: 2
+series:
+  - entity: sensor.elia_sdac_current_price
+    stroke_width: 2
+    float_precision: 3
+    type: column
+    opacity: 1
+    color: ""
+    data_generator: |
+      const today = entity.attributes.prices_today || [];
+      const tomorrow = entity.attributes.prices_tomorrow || [];
+      return [...today, ...tomorrow].map((entry) => {
+        return [new Date(entry.time), entry.price];
+      });

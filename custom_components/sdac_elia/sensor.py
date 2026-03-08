@@ -28,6 +28,8 @@ from .const import(
     CONF_CUSTOM_INJ_TARIFF,
     CONF_CUSTOM_PRICE,
     PRICES,
+    PRICES_TODAY,
+    PRICES_TOMORROW,
     CURRENT_PRICE,
     LAST_FETCH_TIME,
     DOMAIN,
@@ -104,10 +106,11 @@ class EliaSensor(CoordinatorEntity, SensorEntity): # pyright: ignore[reportIncom
     
     @property
     def extra_state_attributes(self) -> dict[str, Any]: # pyright: ignore[reportIncompatibleVariableOverride]
-        """Store all SDAC prices of the day."""
+        """Store all SDAC prices of today and tomorrow."""
         return {
             "Last update:": self.coordinator.data[LAST_FETCH_TIME],
-            "prices": self.coordinator.data[PRICES],
+            "prices_today": self.coordinator.data[PRICES_TODAY],
+            "prices_tomorrow": self.coordinator.data[PRICES_TOMORROW],
             }
 
 
