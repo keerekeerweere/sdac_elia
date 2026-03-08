@@ -4,9 +4,9 @@
   "codeowners": ["@milanhin"],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://github.com/milanhin/sdac_elia",
+  "documentation": "https://github.com/keerekeerweere/sdac_elia",
   "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/milanhin/sdac_elia/issues",
+  "issue_tracker": "https://github.com/keerekeerweere/sdac_elia/issues",
   "requirements": [],
-  "version": "2.0.0"
+  "version": "2.1.0"
 }
